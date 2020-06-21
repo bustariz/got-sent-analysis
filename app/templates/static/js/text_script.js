@@ -7,26 +7,22 @@ function init(){
             var names = response.results.map(o => o.name);
             var total_words = response.results.map(o => o.total_word_count);
 
+            var ctx = document.getElementById('all_bar').getContext('2d');
+            var chart = new Chart(ctx, {
+                // The type of chart we want to create
+                type: 'horizontalBar',
 
-            // Sample Values for x axis
-            var xValues = names.slice(0,10);
-
-            // OTU IDs for Y axis
-            var yValues = total_words.slice(0,10);
-            
-
-            // build trace
-            var trace1 = {
-            x: xValues,
-            y: yValues,
-            type: 'bar',
-            };
-
-            var barData = [trace1];
-            
-            // plot bar chart
-            Plotly.newPlot("all_bar", barData);
-
+                // The data for our dataset
+                data: {
+                    labels: names.slice(0,10),
+                    datasets: [{
+                        label: 'Total Word Count',
+                        backgroundColor: 'rgb(200, 214, 185)',
+                        borderColor: 'rgb(200, 214, 185)',
+                        data: total_words.slice(0,10)
+                    }]
+                },
+            });
         })
 
     const season_one_url = `http://localhost:5000/api/v1.0/text/season/1`
@@ -36,32 +32,29 @@ function init(){
         var names = response.results.map(o => o.name);
         var total_words = response.results.map(o => o.total_word_count);
         // console.log(nw);
-
-
-        // Sample Values for x axis
-        var xValues = names.slice(0,10);
-
-        // OTU IDs for Y axis
-        var yValues = total_words.slice(0,10);
         
+        var ctx = document.getElementById('bar').getContext('2d');
+        var chart = new Chart(ctx, {
+            // The type of chart we want to create
+            type: 'horizontalBar',
 
-        // build trace
-        var trace1 = {
-        x: xValues,
-        y: yValues,
-        type: 'bar'
-        };
-
-        var barData = [trace1];
-        
-        // plot bar chart
-        Plotly.newPlot("bar", barData);
+            // The data for our dataset
+            data: {
+                labels: names.slice(0,10),
+                datasets: [{
+                    label: 'Total Word Count',
+                    backgroundColor: 'rgb(200, 214, 185)',
+                    borderColor: 'rgb(200, 214, 185)',
+                    data: total_words.slice(0,10)
+                }]
+            },
+        });
     })
 
     const word_count_url = `http://localhost:5000/api/v1.0/text/season/all`
 
     fetch(word_count_url).then(response => response.json()).then(response =>{
-        // var obj_keys = Object.keys(obj.results);
+
         var data = response.results;
         console.log(data);
 
@@ -85,24 +78,22 @@ function init(){
         var seasons = sorted_data.map(o => o.season);
         var total_words = sorted_data.map(o => o.total_word_count);
 
-        // Sample Values for x axis
-        var xValues = seasons;
+        var ctx = document.getElementById('all_line').getContext('2d');
+        var chart = new Chart(ctx, {
+            // The type of chart we want to create
+            type: 'line',
 
-        // OTU IDs for Y axis
-        var yValues = total_words.slice(0,10);
-        
-
-        // build trace
-        var trace1 = {
-        x: xValues,
-        y: yValues,
-        type: 'line'
-        };
-
-        var barData = [trace1];
-        
-        // plot bar chart
-        Plotly.newPlot("all_line", barData);
+            // The data for our dataset
+            data: {
+                labels: seasons,
+                datasets: [{
+                    label: 'Total Word Count',
+                    // backgroundColor: 'rgb(200, 214, 185)',
+                    borderColor: 'rgb(200, 214, 185)',
+                    data: total_words
+                }]
+            },
+        });
     })
 }
 
@@ -126,25 +117,22 @@ function optionChanged(){
         var total_words = obj.results.map(o => o.total_word_count);
         // console.log(nw);
 
+        var ctx = document.getElementById('bar').getContext('2d');
+        var chart = new Chart(ctx, {
+            // The type of chart we want to create
+            type: 'horizontalBar',
 
-        // Sample Values for x axis
-        var xValues = names.slice(0,10);
-
-        // OTU IDs for Y axis
-        var yValues = total_words.slice(0,10);
-        
-
-        // build trace
-        var trace1 = {
-        x: xValues,
-        y: yValues,
-        type: 'bar'
-        };
-
-        var barData = [trace1];
-        
-        // plot bar chart
-        Plotly.newPlot("bar", barData);
+            // The data for our dataset
+            data: {
+                labels: names.slice(0,10),
+                datasets: [{
+                    label: 'Total Word Count',
+                    backgroundColor: 'rgb(200, 214, 185)',
+                    borderColor: 'rgb(200, 214, 185)',
+                    data: total_words.slice(0,10)
+                }]
+            },
+        });
     })
 }
 

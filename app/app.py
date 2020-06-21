@@ -12,12 +12,10 @@ CORS(app)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/sent_analysisdb"
 mongo = PyMongo(app)
 
-# Or set inline
-# mongo = PyMongo(app, uri="mongodb://localhost:27017/mars_app")
+data.run_functions()
 
 @app.route("/api/v1.0/text/season")
 def index():
-    
     collection = mongo.db.got_scripts
 
     pipeline = [
@@ -26,7 +24,6 @@ def index():
                 "_id":"$name",
                 "total_word_count": {"$sum":"$word_count"},
                 "avg_compound_score": {"$avg":"$compound_score"}
-                # "ident":{"$push":{"name": "$name"}}
             }
         },
         {
@@ -45,7 +42,6 @@ def index():
             "name":item["_id"],
             "total_word_count":item["total_word_count"],
             "avg_compound_score": item["avg_compound_score"]
-            # "name": item['ident']
             })
 
     return jsonify({"results": output})
@@ -117,7 +113,6 @@ def all_season_text():
             "season":item["_id"],
             "total_word_count":item["total_word_count"],
             "avg_compound_score": item["avg_compound_score"]
-            # "name": item['ident']
             })
 
     return jsonify({"results": output})

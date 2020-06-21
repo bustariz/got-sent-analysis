@@ -6,30 +6,27 @@ function init(){
             var data = response.results;
 
             var sorted_data = data.sort((a, b) => b.avg_compound_score - a.avg_compound_score);
-            // console.log(sorted_data);
 
             var names = response.results.map(o => o.name);
             var avg_compound_score = response.results.map(o => o.avg_compound_score);
 
 
-            // Sample Values for x axis
-            var xValues = names.slice(0,10);
+            var ctx = document.getElementById('sent_all_bar').getContext('2d');
+            var chart = new Chart(ctx, {
+                // The type of chart we want to create
+                type: 'horizontalBar',
 
-            // OTU IDs for Y axis
-            var yValues = avg_compound_score.slice(0,10);
-            
-
-            // build trace
-            var trace1 = {
-            x: xValues,
-            y: yValues,
-            type: 'bar',
-            };
-
-            var barData = [trace1];
-            
-            // plot bar chart
-            Plotly.newPlot("sent_all_bar", barData);
+                // The data for our dataset
+                data: {
+                    labels: names.slice(0,10),
+                    datasets: [{
+                        label: 'Average Compound Score',
+                        backgroundColor: 'rgb(200, 214, 185)',
+                        borderColor: 'rgb(200, 214, 185)',
+                        data: avg_compound_score.slice(0,10)
+                    }]
+                },
+            });
 
         })
 
@@ -45,25 +42,22 @@ function init(){
         var avg_compound_score = sorted_data.map(o => o.avg_compound_score);
         // console.log(nw);
 
+        var ctx = document.getElementById('bar').getContext('2d');
+        var chart = new Chart(ctx, {
+            // The type of chart we want to create
+            type: 'horizontalBar',
 
-        // Sample Values for x axis
-        var xValues = names.slice(0,10);
-
-        // OTU IDs for Y axis
-        var yValues = avg_compound_score.slice(0,10);
-        
-
-        // build trace
-        var trace1 = {
-        x: xValues,
-        y: yValues,
-        type: 'bar'
-        };
-
-        var barData = [trace1];
-        
-        // plot bar chart
-        Plotly.newPlot("sent_bar", barData);
+            // The data for our dataset
+            data: {
+                labels: names.slice(0,10),
+                datasets: [{
+                    label: 'Average Compound Score',
+                    backgroundColor: 'rgb(200, 214, 185)',
+                    borderColor: 'rgb(200, 214, 185)',
+                    data: avg_compound_score.slice(0,10)
+                }]
+            },
+        });
     })
 
     const word_count_url = `http://localhost:5000/api/v1.0/text/season/all`
@@ -93,24 +87,22 @@ function init(){
         var seasons = sorted_data.map(o => o.season);
         var avg_compound_score = sorted_data.map(o => o.avg_compound_score);
 
-        // Sample Values for x axis
-        var xValues = seasons;
+        var ctx = document.getElementById('sent_all_line').getContext('2d');
+        var chart = new Chart(ctx, {
+            // The type of chart we want to create
+            type: 'line',
 
-        // OTU IDs for Y axis
-        var yValues = avg_compound_score;
-        
-
-        // build trace
-        var trace1 = {
-        x: xValues,
-        y: yValues,
-        type: 'line'
-        };
-
-        var barData = [trace1];
-        
-        // plot bar chart
-        Plotly.newPlot("sent_all_line", barData);
+            // The data for our dataset
+            data: {
+                labels: seasons,
+                datasets: [{
+                    label: 'Average Compound Score',
+                    // backgroundColor: 'rgb(200, 214, 185)',
+                    borderColor: 'rgb(200, 214, 185)',
+                    data: avg_compound_score
+                }]
+            },
+        });
     })
 }
 
@@ -139,24 +131,22 @@ function optionChanged(){
         // console.log(nw);
 
 
-        // Sample Values for x axis
-        var xValues = names.slice(0,10);
+        var ctx = document.getElementById('bar').getContext('2d');
+        var chart = new Chart(ctx, {
+            // The type of chart we want to create
+            type: 'horizontalBar',
 
-        // OTU IDs for Y axis
-        var yValues = avg_compound_score.slice(0,10);
-        
-
-        // build trace
-        var trace1 = {
-        x: xValues,
-        y: yValues,
-        type: 'bar'
-        };
-
-        var barData = [trace1];
-        
-        // plot bar chart
-        Plotly.newPlot("sent_bar", barData);
+            // The data for our dataset
+            data: {
+                labels: names.slice(0,10),
+                datasets: [{
+                    label: 'Total Word Count',
+                    backgroundColor: 'rgb(200, 214, 185)',
+                    borderColor: 'rgb(200, 214, 185)',
+                    data: avg_compound_score.slice(0,10)
+                }]
+            },
+        });
     })
 }
 
