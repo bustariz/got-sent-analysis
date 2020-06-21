@@ -19,11 +19,13 @@
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
 
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="index.html">Text Analysis <span class="sr-only">(current)</span></a>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="index.html">Text Analysis</a>
+                        <!-- <a class="nav-link" href="#">Text Analysis <span class="sr-only">(current)</span></a> -->
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="sent_analysis.html">Sentiment Analysis</a>
+                    <li class="nav-item active">
+                        <!-- <a class="nav-link" href="#">Sentiment Analysis</a> -->
+                        <a class="nav-link" href="sent_analysis.html">Sentiment Analysis <span class="sr-only">(current)</span></a>
                     </li>
 
                 </ul>
@@ -35,14 +37,14 @@
         <div class="row">
             <div class="col-md-12 jumbotron text-center">
                 <h1>Game of Thrones Script Analysis Dashboard</h1>
-                <p>Use the interactive charts below to explore the word count data for the series</p>
+                <p>Use the interactive charts below to explore the script sentiment for the series </p>
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Word Count - Top 10 by Season</h4>
+                        <h4 class="card-title">Sentiment Score - Top 10 by Season</h4>
                     </div>
                     <div class="card-body">
                         <select id="selDataset1">
@@ -57,17 +59,17 @@
                             <option value="8">Season 8</option>
                         </select>
                         <!-- <p>{{db_data_json}}</p> -->
-                        <div id='bar'></div>
+                        <div id='sent_bar'></div>
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Word Count - Top 10 in the Series</h4>
+                        <h4 class="card-title">Sentiment Score - Top 10 in the Series</h4>
                     </div>
                     <div class="card-body">
-                        <div id='all_bar'></div>
+                        <div id='sent_all_bar'></div>
                     </div>
                 </div>
             </div>
@@ -77,11 +79,10 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Word Count by Season</h4>
+                        <h4 class="card-title">Sentiment Score by Season</h4>
                     </div>
                     <div class="card-body">
-                        <div id='all_line'></div>
-                        <!-- <canvas id="myChart"></canvas> -->
+                        <div id='sent_all_line'></div>
                     </div>
                 </div>
             </div>
@@ -97,8 +98,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-    <script src="static/js/text_script.js"></script>
+    <script src="static/js/sent_script.js"></script>
 
 </body>
 </html>
