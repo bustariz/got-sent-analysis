@@ -1,79 +1,40 @@
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+# from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import pandas as pd
-from statistics import mean
-import nltk
-from pymongo import MongoClient
+import numpy as np
+from textblob import TextBlob
+from sqlalchemy import create_engine
 
 
-def run_functions():
-    dictionary = got_sent_analysis()
+engine = create_engine('postgresql://postgres:bru1014ustz91@localhost/got_db')
 
-    import_to_mongo(dictionary)
+# # Reads in script from csv file and renames columns to lowercase
+# path = '../data/Game_of_Thrones_Script.csv'
 
+# script_df = pd.read_csv(path)
 
-# function to create df from csv and add needed columns to script csv and exports to dictionary
-# path = 'Game_of_Thrones_Script.csv'
-def got_sent_analysis():
-
-    path = '../Game_of_Thrones_Script.csv'
-
-    script_df = pd.read_csv(path)
-
-    script_df = script_df.rename(columns = {'Release Date': 'release_date',
-                                            'Season': 'season',
-                                            'Episode':'episode',
-                                            'Episode Title':'episode_title',
-                                            'Name':'name', 
-                                            'Sentence': 'sentence'
-                                        })
-
-
-    # sentiment analysis for script df using vaderSentiment library
-    analyzer = SentimentIntensityAnalyzer()
-    sent_analysis = [analyzer.polarity_scores(sentence) for sentence in script_df.sentence]
-
-    # adds column to df for each polarity score (pos,compound,neu,neg)
-    script_df['positive_score'] = [key.get('pos') for key in sent_analysis]
-    script_df['compound_score'] = [key.get('compound') for key in sent_analysis]
-    script_df['neutral_score'] = [key.get('neu') for key in sent_analysis]
-    script_df['negative_score'] = [key.get('neg') for key in sent_analysis]
-
-    # using nltk to separate sentence into words and punctuation as a list and add as a column into df
-    script_df['tokenized_words'] = [nltk.word_tokenize(sentence)for sentence in script_df.sentence]
-
-
-    # tokenized_words column with punctuation removed 
-    script_df['alphanumeric_words'] = script_df.tokenized_words.apply(lambda x: [item for item in x if item.isalnum()])
-
-
-    #adds column for word count within stripped down sentences
-    script_df['word_count'] = [len(words) for words in script_df.alphanumeric_words ]
-    script_df
-
-
-    # converts df into dictionary and adds to mongodb
-    script_dict = script_df.to_dict('records')
-    
-    
-    
-    return script_dict
+# script_df = script_df.rename(columns = {'Release Date': 'release_date',
+#                                         'Season': 'season',
+#                                         'Episode':'episode',
+#                                         'Episode Title':'episode_title',
+#                                         'Name':'name', 
+#                                         'Sentence': 'sentence'
+#                                        })
 
 
 
-def import_to_mongo(dictionary):
-    client = MongoClient('mongodb://localhost:27017/')
 
-    # setting variable for db
-    db = client.sent_analysisdb
+# text_blobs = [TextBlob(sentence) for sentence in script_df.sentence]
 
-    # setting variable for collection in db
-    col = db.got_scripts
 
-    col.remove({})
-    # inserts dictionary into db
-    col.insert_many(dictionary)
 
-    client.close()
+# script_df['tokenized_words'] = [sentence.words for sentence in text_blobs]
+# script_df['alpha_numeric_words'] = script_df.tokenized_words.apply(lambda x: [item for item in x if item.isalnum()])
+# script_df['word_count'] = [len(words) for words in script_df.alpha_numeric_words ]
+# script_df['polarity_score'] = [sentence.sentiment.polarity for sentence in text_blobs]
+# script_df['subjectivity_score'] = [sentence.sentiment.subjectivity for sentence in text_blobs]
+
+
+# script_df.to_sql('got_script',engine)
 
 
 
