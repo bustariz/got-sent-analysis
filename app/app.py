@@ -3,7 +3,7 @@ import numpy as np
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, func, desc, asc
 
 from flask import Flask, render_template, jsonify
 
@@ -22,7 +22,7 @@ Base = automap_base()
 Base.prepare(engine,reflect = True)
 
 # # ref to the table
-# script = Base.classes.got_script
+script = Base.classes.got_script
 
 #################################################
 # flask setup
@@ -40,136 +40,56 @@ def welcome():
     # return 'Hello World!'
     return (
         f"Available Routes: <br/>"
-        f"/api/v1.0/text <br/>"
-        f'/api/v1.0/sentiment'
+        f"/api/v1.0/chars <br/>"
+        f'/api/v1.0/season/<season_num> <br/>'
+        f'/api/v1.0/season/all <br/>'
     )
 
-# @app.route('/api/v1.0/text')
-# def text_analysis():
-#       # Create our session (link) from Python to the DB
-#     session = Session(engine)
+@app.route('/api/v1.0/chars')
+def text_analysis():
+      # Create our session (link) from Python to the DB
+    session = Session(engine)
 
-#     """Return a list of all passenger names"""
-#     # Query all passengers
-#     results = session.query(script_table).all()
+    """Return a list of all passenger names"""
+    # Query all passengers
+    results = session.query(script.name, func.avg(script.polarity_score), func.avg(script.subjectivity_score)).group_by(script.name).order_by(asc(script.name)).all()
 
-#     session.close()
+    session.close()
 
-#     all_names = list(np.ravel(results))
+    all_names = list(np.ravel(results))
 
-#     return jsonify(all_names)
-
-
-# Use flask_pymongo to set up mongo connection
-# app.config["MONGO_URI"] = "mongodb://localhost:27017/sent_analysisdb"
-# mongo = PyMongo(app)
-
-# data.run_functions()
-
-# @app.route("/api/v1.0/text/season")
-# def index():
-#     collection = mongo.db.got_scripts
-
-#     pipeline = [
-#         {
-#             "$group":{
-#                 "_id":"$name",
-#                 "total_word_count": {"$sum":"$word_count"},
-#                 "avg_compound_score": {"$avg":"$compound_score"}
-#             }
-#         },
-#         {
-#             "$sort":{"total_word_count":-1}
-#         },
-#         {
-#             "$limit": 100
-#         }
-#     ]
-
-#     chars_word_count = collection.aggregate(pipeline=pipeline)
-    
-#     output = []
-#     for item in chars_word_count:
-#         output.append({
-#             "name":item["_id"],
-#             "total_word_count":item["total_word_count"],
-#             "avg_compound_score": item["avg_compound_score"]
-#             })
-
-#     return jsonify({"results": output})
+    return jsonify(all_names)
 
 
+@app.route('/api/v1.0/season/<string:season_num>')
+def text_analysis():
+      # Create our session (link) from Python to the DB
+    session = Session(engine)
 
-# @app.route("/api/v1.0/text/season/<string:season_num>")
-# def season_text(season_num):
+    """Return a list of all passenger names"""
+    # Query all passengers
+    results = session.query(script.name, func.avg(script.polarity_score), func.avg(script.subjectivity_score)).group_by(script.name).order_by(asc(script.name)).all()
 
-#     collection = mongo.db.got_scripts
+    session.close()
 
-#     pipeline = [
-#         {
-#             "$match":{"season":f"Season {season_num}"}
-#         },
-#         {
-#             "$group":{
-#                 "_id":"$name",
-#                 "total_word_count": {"$sum":"$word_count"},
-#                 "avg_compound_score": {"$avg":"$compound_score"}
-#             }
-#         },
-#         {
-#             "$sort":{"total_word_count":-1}
-#         },
-#         {
-#             "$limit": 100
-#         }
-#     ]
+    all_names = list(np.ravel(results))
 
-#     chars_word_count = collection.aggregate(pipeline=pipeline)
-    
-#     output = []
-#     for item in chars_word_count:
-#         output.append({
-#             "name":item["_id"],
-#             "total_word_count":item["total_word_count"],
-#             "avg_compound_score": item["avg_compound_score"]
-#             })
+    return jsonify(all_names)
 
-#     return jsonify({"results": output})
+@app.route('/api/v1.0/season/all')
+def text_analysis():
+      # Create our session (link) from Python to the DB
+    session = Session(engine)
 
-# @app.route("/api/v1.0/text/season/all")
-# def all_season_text():
-    
-#     collection = mongo.db.got_scripts
+    """Return a list of all passenger names"""
+    # Query all passengers
+    results = session.query(script.name, func.avg(script.polarity_score), func.avg(script.subjectivity_score)).group_by(script.name).order_by(asc(script.name)).all()
 
-#     pipeline = [
-#         {
-#             "$group":{
-#                 "_id":"$season",
-#                 "total_word_count": {"$sum":"$word_count"},
-#                 "avg_compound_score": {"$avg":"$compound_score"}
-#             }
-#         },
-#         {
-#             "$sort":{"total_word_count":-1}
-#         },
-#         {
-#             "$limit": 100
-#         }
-#     ]
+    session.close()
 
-#     chars_word_count = collection.aggregate(pipeline=pipeline)
-    
-#     output = []
-#     for item in chars_word_count:
-#         output.append({
-#             "season":item["_id"],
-#             "total_word_count":item["total_word_count"],
-#             "avg_compound_score": item["avg_compound_score"]
-#             })
+    all_names = list(np.ravel(results))
 
-#     return jsonify({"results": output})
-
-
+    return jsonify(all_names)    
 
 
 if __name__ == "__main__":

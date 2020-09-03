@@ -28,4 +28,8 @@ script_df['word_count'] = [len(words) for words in script_df.alpha_numeric_words
 script_df['polarity_score'] = [sentence.sentiment.polarity for sentence in text_blobs]
 script_df['subjectivity_score'] = [sentence.sentiment.subjectivity for sentence in text_blobs]
 
-script_df.to_sql('got_script',engine)
+script_df.to_sql('got_script',con=engine, if_exists = 'replace')
+
+
+# with engine.connect() as con:
+#     con.execute('ALTER TABLE `got_script` ADD PRIMARY KEY (`index`);')
