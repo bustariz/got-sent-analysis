@@ -46,7 +46,7 @@ def welcome():
     )
 
 @app.route('/api/v1.0/chars')
-def text_analysis():
+def chars_data():
       # Create our session (link) from Python to the DB
     session = Session(engine)
 
@@ -62,13 +62,15 @@ def text_analysis():
 
 
 @app.route('/api/v1.0/season/<string:season_num>')
-def text_analysis():
+def season_data(season_num):
       # Create our session (link) from Python to the DB
     session = Session(engine)
 
     """Return a list of all passenger names"""
     # Query all passengers
-    results = session.query(script.name, func.avg(script.polarity_score), func.avg(script.subjectivity_score)).group_by(script.name).order_by(asc(script.name)).all()
+    # results = session.query(script.name, func.avg(script.polarity_score), func.sum(script.word_count)).group_by(script.name).order_by(asc(script.name)).all()
+
+    results = session.query(script.name, func.avg(script.word_count)).group_by(script.name).order_by(script.name).all()
 
     session.close()
 
@@ -77,13 +79,13 @@ def text_analysis():
     return jsonify(all_names)
 
 @app.route('/api/v1.0/season/all')
-def text_analysis():
+def all_data():
       # Create our session (link) from Python to the DB
     session = Session(engine)
 
     """Return a list of all passenger names"""
     # Query all passengers
-    results = session.query(script.name, func.avg(script.polarity_score), func.avg(script.subjectivity_score)).group_by(script.name).order_by(asc(script.name)).all()
+    results = session.query(script.season, func.avg(script.polarity_score), func.avg(script.subjectivity_score)).group_by(script.season).order_by(asc(script.season)).all()
 
     session.close()
 
