@@ -4,6 +4,7 @@ import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func, desc, asc
+from sqlalchemy.sql.expression import cast
 
 from flask import Flask, render_template, jsonify
 
@@ -52,7 +53,12 @@ def chars_data():
 
     """Return a list of all passenger names"""
     # Query all passengers
-    results = session.query(script.name, func.avg(script.polarity_score), func.avg(script.subjectivity_score)).group_by(script.name).order_by(asc(script.name)).all()
+    results = (
+            session.query(script.name, func.avg(script.polarity_score), func.avg(script.subjectivity_score))
+            .group_by(script.name)
+            .order_by(asc(script.name))
+            .all()
+        )
 
     session.close()
 
@@ -68,9 +74,15 @@ def season_data(season_num):
 
     """Return a list of all passenger names"""
     # Query all passengers
-    # results = session.query(script.name, func.avg(script.polarity_score), func.sum(script.word_count)).group_by(script.name).order_by(asc(script.name)).all()
+    results = (
+            session.query(script.name, func.avg(script.polarity_score), func.sum(cast(script.word_count,sqlalchemy.Integer)))
+            .group_by(script.name,script.word_count)
+            .order_by(desc(script.word_count))
+            .filter(script.season == f'Season {season_num}')
+            .all()
+        )
 
-    results = session.query(script.name, func.avg(script.word_count)).group_by(script.name).order_by(script.name).all()
+    # results = session.query(script.name, func.sum(cast(script.word_count,sqlalchemy.Integer))).filter(script.season == f'Season {season_num}').group_by(script.name).all()
 
     session.close()
 
@@ -82,10 +94,15 @@ def season_data(season_num):
 def all_data():
       # Create our session (link) from Python to the DB
     session = Session(engine)
-
+ 
     """Return a list of all passenger names"""
     # Query all passengers
-    results = session.query(script.season, func.avg(script.polarity_score), func.avg(script.subjectivity_score)).group_by(script.season).order_by(asc(script.season)).all()
+    results = (
+            session.query(script.season, func.avg(script.polarity_score), func.avg(script.subjectivity_score))
+            .group_by(script.season)
+            .order_by(asc(script.season))
+            .all()
+        )
 
     session.close()
 
